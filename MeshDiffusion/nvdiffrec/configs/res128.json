@@ -12,8 +12,8 @@
     "laplace_scale" : 10000,
     "display": [{"bsdf" : "kd"}, {"bsdf" : "ks"}, {"bsdf" : "normal"}, {"depth": true}],
     "background" : "white",
-    "envmap": "./data/irrmaps/aerodynamics_workshop_2k.hdr",
-    "tet_path": "./data/tets/128_tets_cropped.npz",
+    "envmap": "./data_/irrmaps/aerodynamics_workshop_2k.hdr",
+    "tet_path": "./data_/tets/128_tets_cropped.npz",
     "first_stage_deform": 0.45,
     "second_stage_deform": 1.5
 }

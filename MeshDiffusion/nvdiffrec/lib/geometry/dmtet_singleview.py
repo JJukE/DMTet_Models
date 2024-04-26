@@ -224,9 +224,9 @@ class DMTetGeometry(torch.nn.Module):
 
         if self.cropped:
             print("use cropped tets")
-            tets = np.load(os.path.join(root, 'data/tets/{}_tets_cropped.npz'.format(self.grid_res)))
+            tets = np.load(os.path.join(root, 'data_/tets/{}_tets_cropped.npz'.format(self.grid_res)))
         else:
-            tets = np.load(os.path.join(root, 'data/tets/{}_tets.npz'.format(self.grid_res)))
+            tets = np.load(os.path.join(root, 'data_/tets/{}_tets.npz'.format(self.grid_res)))
         print('tet min and max', tets['vertices'].min() * scale, tets['vertices'].max() * scale)
         self.verts    = torch.tensor(tets['vertices'], dtype=torch.float32, device='cuda') * scale
         self.indices  = torch.tensor(tets['indices'], dtype=torch.long, device='cuda')

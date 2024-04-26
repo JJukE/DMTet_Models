@@ -185,7 +185,7 @@ class DMTetGeometryFixedTopo(torch.nn.Module):
         self.tanh          = False
         self.deform_scale  = deform_scale
 
-        tets = np.load('./data/tets/{}_tets_cropped.npz'.format(self.grid_res))
+        tets = np.load('./data_/tets/{}_tets_cropped.npz'.format(self.grid_res))
 
         self.verts    = torch.tensor(tets['vertices'], dtype=torch.float32, device='cuda') * scale
         self.indices  = torch.tensor(tets['indices'], dtype=torch.long, device='cuda')

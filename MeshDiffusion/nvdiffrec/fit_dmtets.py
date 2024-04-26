@@ -45,17 +45,17 @@ RADIUS = 2.0
 # # Enable to debug back-prop anomalies
 # torch.autograd.set_detect_anomaly(True)
 
-# define colors
-color1 = (0, 0, 255)     #red
-color2 = (0, 165, 255)   #orange
-color3 = (0, 255, 255)   #yellow
-color4 = (255, 255, 0)   #cyan
-color5 = (255, 0, 0)     #blue
-color6 = (128, 64, 64)   #violet
-colorArr = np.array([[color1, color2, color3, color4, color5, color6]], dtype=np.uint8)
+# # define colors
+# color1 = (0, 0, 255)     #red
+# color2 = (0, 165, 255)   #orange
+# color3 = (0, 255, 255)   #yellow
+# color4 = (255, 255, 0)   #cyan
+# color5 = (255, 0, 0)     #blue
+# color6 = (128, 64, 64)   #violet
+# colorArr = np.array([[color1, color2, color3, color4, color5, color6]], dtype=np.uint8)
 
-# resize lut to 256 (or more) values
-lut = cv2.resize(colorArr, (256,1), interpolation = cv2.INTER_LINEAR)
+# # resize lut to 256 (or more) values
+# lut = cv2.resize(colorArr, (256,1), interpolation = cv2.INTER_LINEAR)
 
 ###############################################################################
 # Loss setup
@@ -609,6 +609,8 @@ if __name__ == "__main__":
         FLAGS.local_rank = int(os.environ["LOCAL_RANK"])
         torch.cuda.set_device(FLAGS.local_rank)
         torch.distributed.init_process_group(backend="nccl", init_method="env://")
+    else:
+        torch.cuda.set_device(0)
 
     if FLAGS.config is not None:
         data = json.load(open(FLAGS.config, 'r'))
@@ -633,7 +635,7 @@ if __name__ == "__main__":
 
     print(f"Using dmt grid of resolution {FLAGS.dmtet_grid}")
 
-    glctx = dr.RasterizeGLContext()
+    glctx = dr.RasterizeCudaContext()
 
     ### Default mtl
     mtl_default = {

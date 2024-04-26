@@ -667,7 +667,7 @@ if __name__ == "__main__":
 
     print(f"Using dmtet grid of resolution {FLAGS.dmtet_grid}")
 
-    glctx = dr.RasterizeGLContext()
+    glctx = dr.RasterizeCudaContext()
 
     ### Default mtl
     mtl_default = {

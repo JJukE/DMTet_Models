@@ -215,7 +215,7 @@ class DMTetGeometry(torch.nn.Module):
         self.padding = 5
         self.smooth_kernel = torch.ones(1, 1, self.padding*2 + 1, self.padding*2 + 1).cuda()
 
-        tets = np.load(os.path.join(root, 'data/tets/{}_tets_cropped.npz'.format(self.grid_res)))
+        tets = np.load(os.path.join(root, 'data_/tets/{}_tets_cropped.npz'.format(self.grid_res)))
         self.verts    = torch.tensor(tets['vertices'], dtype=torch.float32, device='cuda') * scale
         self.indices  = torch.tensor(tets['indices'], dtype=torch.long, device='cuda')
         self.generate_edges()

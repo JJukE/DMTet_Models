@@ -364,7 +364,7 @@ if __name__ == "__main__":
     os.makedirs(viz_path, exist_ok=True)
     os.makedirs(mesh_path, exist_ok=True)
 
-    glctx = dr.RasterizeGLContext()
+    glctx = dr.RasterizeCudaContext()
 
     # ==============================================================================================
     #  Create env light with trainable parameters
