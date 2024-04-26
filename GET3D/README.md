@@ -1,5 +1,7 @@
 ## GET3D: A Generative Model of High Quality 3D Textured Shapes Learned from Images (NeurIPS 2022)<br><sub>Official PyTorch implementation </sub>
 
+Only using improved one!! (by JJukE)
+
 ![Teaser image](./docs/assets/get3d_model.png)
 
 **GET3D: A Generative Model of High Quality 3D Textured Shapes Learned from Images**<br>
@@ -87,7 +89,7 @@ We integrate [FlexiCubes](https://research.nvidia.com/labs/toronto-ai/flexicubes
 cd YOUR_CODE_PATH
 git clone git@github.com:nv-tlabs/GET3D.git
 cd GET3D; mkdir cache; cd cache
-wget https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/metrics/inception-2015-12-05.pkl
+curl -LO "https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/metrics/inception-2015-12-05.pkl"
 ```
 
 #### Train the model

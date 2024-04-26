@@ -66,7 +66,7 @@ class DMTETSynthesisNetwork(torch.nn.Module):
         self.img_channels = img_channels
         self.n_views = n_views
         self.grid_res = tet_res
-        self.iso_surface = iso_surface
+        self.iso_surface = iso_surface # NOTE
         
         # Camera defination, we follow the defination from Blender (check the render_shapenet_data/rener_shapenet.py for more details)
         fovy = np.arctan(32 / 2 / 35) * 2

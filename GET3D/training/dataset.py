@@ -11,7 +11,7 @@ import os
 import numpy as np
 import zipfile
 import torch
-import dnnlib
+import dnnlib # TODO: might be able to replaced to easydict
 import cv2
 
 try:
@@ -226,10 +226,10 @@ class ImageFolderDataset(Dataset):
                     valid_folder_list = set(valid_folder_list)
                     useful_folder_list = set(folder_list).intersection(valid_folder_list)
                     folder_list = sorted(list(useful_folder_list))
-            folder_list = sorted(list(os.listdir(root + "/02958343"))) # TODO: delete
+            # folder_list = sorted(list(os.listdir(root + "/02958343"))) # TODO: delete
             print('==> use shapenet folder number %s' % (len(folder_list)))
-            # folder_list = [os.path.join(root, f) for f in folder_list]
-            folder_list = [os.path.join(root, "02958343", f) for f in folder_list] # TODO: delete
+            folder_list = [os.path.join(root, f) for f in folder_list]
+            # folder_list = [os.path.join(root, "02958343", f) for f in folder_list] # TODO: delete
             all_img_list = []
             all_mask_list = []
 

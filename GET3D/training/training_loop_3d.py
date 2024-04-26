@@ -23,6 +23,7 @@ import nvdiffrast.torch as dr
 import time
 from training.inference_utils import save_image_grid, save_visualization
 
+CUDA_VISIBLE_DEVICES = [int(device_id) for device_id in os.environ["CUDA_VISIBLE_DEVICES"].split(',')]
 
 # ----------------------------------------------------------------------------
 # Function to save the real image for discriminator training
