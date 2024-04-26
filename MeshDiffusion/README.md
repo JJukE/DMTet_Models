@@ -105,12 +105,19 @@ Caution: the deformation scale should be consistent for single view fitting and 
 
 ## Training
 
-For ShapeNet, first create a list of paths of all ground-truth meshes and store them as a json file under `./nvdiffrec/data/shapenet_json`.
+For ShapeNet, first create a list of paths of all ground-truth meshes and store them as a json file.
+
+```
+cd nvdiffrec/data_
+make_gt_json.py --dataset_folder $DATASET_FOLDER
+```
+
+where `DATASET_FOLDER` means the root directory path of ShapeNet dataset(.../ShapeNetCore.v1).
 
 Then run the following
 
 ```
-cd nvdiffrec
+cd .. # nvdiffrec
 python fit_dmtets.py --config $DMTET_CONFIG --meta-path $META_PATH --out-dir $DMTET_DATA_PATH --index 0 --split-size 100000
 ```
 
