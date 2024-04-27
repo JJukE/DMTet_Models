@@ -10,12 +10,12 @@ parser.add_argument(
 args = parser.parse_args()
 
 synset_list = [
-    # '02691156', # Plane -> added
-    # '02958343', # Car
-    # '03001627', # Chair
-    # '04379243', # Table -> added
-    # '03790512', # Motorbike
-    '04090263'  # rifile
+    '02691156', # Plane
+    '02958343', # Car
+    '03001627', # Chair
+    '04379243', # Table -> added
+    '03790512', # Motorbike
+    '04090263'  # rifle
 ]
 
 for synset in synset_list:
