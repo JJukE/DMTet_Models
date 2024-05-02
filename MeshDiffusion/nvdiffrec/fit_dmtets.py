@@ -635,7 +635,7 @@ if __name__ == "__main__":
 
     print(f"Using dmt grid of resolution {FLAGS.dmtet_grid}")
 
-    glctx = dr.RasterizeCudaContext()
+    glctx = dr.RasterizeCudaContext() # TODO: device=self.device
 
     ### Default mtl
     mtl_default = {
@@ -730,9 +730,6 @@ if __name__ == "__main__":
                     vert_mask = torch.zeros_like(geometry.sdf).long().cuda().view(-1, 1)
                     vert_mask[geometry.getValidVertsIdx()] = 1
 
-                    # Free temporaries / cached memory 
-                    torch.cuda.empty_cache() ### may slow down training
-
                     torch.save({
                         'sdf': geometry.sdf.cpu().detach(),
                         'sdf_ema': geometry.sdf_ema.cpu().detach(),
@@ -802,7 +799,6 @@ if __name__ == "__main__":
                 del ref_mesh
                 del dataset_train
                 del dataset_validate
-                torch.cuda.empty_cache() ### may slow down training
 
                 print(f"\n\n============ {FLAGS.index}_{k}/{FLAGS.split_size} finished ============\n\n")
             except Exception as err:

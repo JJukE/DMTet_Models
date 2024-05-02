@@ -29,12 +29,12 @@ def xatlas_uvmap(ctx, mesh_v, mesh_pos_idx, resolution):
     uv_clip = uvs[None, ...] * 2.0 - 1.0
 
     # pad to four component coordinate
-    uv_clip4 = torch.cat((uv_clip, torch.zeros_like(uv_clip[..., 0:1]), torch.ones_like(uv_clip[..., 0:1])), dim=-1)
+    uv_clip4 = torch.cat((uv_clip, torch.zeros_like(uv_clip[..., 0:1]), torch.ones_like(uv_clip[..., 0:1])), dim=-1) # u v z(=0) w(=1)
 
     # rasterize
-    rast, _ = dr.rasterize(ctx, uv_clip4, mesh_tex_idx.int(), (resolution, resolution))
+    rast, _ = dr.rasterize(ctx, uv_clip4, mesh_tex_idx.int(), (resolution, resolution)) # rasterized image
 
     # Interpolate world space position
-    gb_pos, _ = interpolate(mesh_v[None, ...], rast, mesh_pos_idx.int())
-    mask = rast[..., 3:4] > 0
+    gb_pos, _ = interpolate(mesh_v[None, ...], rast, mesh_pos_idx.int()) # global (world) position of each pixel
+    mask = rast[..., 3:4] > 0 # silhouette
     return uvs, mesh_tex_idx, gb_pos, mask
