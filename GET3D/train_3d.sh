@@ -9,4 +9,5 @@ python train_3d.py \
     --data_camera_mode shapenet_car \
     --dmtet_scale 1.0 \
     --use_shapenet_split 1 \
-    --fp32 0
+    --fp32 0 \
+    --resume_pretrain /root/dataset_sj/GET3D/exp/author/00000-stylegan2-02958343-gpus4-batch32-gamma40/network-snapshot-007168.pt

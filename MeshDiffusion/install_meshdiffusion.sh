@@ -14,7 +14,7 @@ pip install opencv-python
 # pip install --global-option="--no-networks" git+https://github.com/NVlabs/tiny-cuda-nn#subdirectory=bindings/torch
 imageio_download_bin freeimage
 
-# install pytorch3d
+# install pytorch3d, opencv, tinucudann, and kaolin
 pip uninstall iopath fvcore
 conda install -c conda-forge -c iopath -c fvcore fvcore iopath -y
 pip install "git+https://github.com/facebookresearch/pytorch3d.git@v0.7.4"

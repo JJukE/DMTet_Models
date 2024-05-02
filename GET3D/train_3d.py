@@ -32,7 +32,8 @@ def subprocess_fn(rank, c, temp_dir):
             torch.distributed.init_process_group(
                 backend='gloo', init_method=init_method, rank=rank, world_size=c.num_gpus)
         else:
-            init_method = 'file:///' + init_file.replace('\\', '/') # nccl: init_method = f'file://{init_file}'
+            print("Initiating DDP process with gloo.")
+            init_method = f'file://{init_file}'
             torch.distributed.init_process_group(
                 backend='gloo', init_method=init_method, rank=rank, world_size=c.num_gpus)
             torch.cuda.set_device(rank)
