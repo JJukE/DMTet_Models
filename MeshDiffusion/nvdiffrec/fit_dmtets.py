@@ -559,7 +559,8 @@ if __name__ == "__main__":
     parser.add_argument('--loss', default='logl1', choices=['logl1', 'logl2', 'mse', 'smape', 'relmse'])
     parser.add_argument('-o', '--out-dir', type=str, default='./dmtet_results')
     parser.add_argument('-bm', '--base-mesh', type=str, default=None)
-    parser.add_argument('--validate', type=bool, default=True)
+    parser.add_argument('--validate', type=bool, default=False) # NOTE
+    parser.add_argument('--only-first-phase', type=bool, default=True) # NOTE
     parser.add_argument('-ind', '--index', type=int)
     parser.add_argument('-ss', '--split-size', type=int, default=10)
     parser.add_argument('--cropped', type=bool, default=True)
@@ -628,8 +629,10 @@ if __name__ == "__main__":
         print("---------")
 
     os.makedirs(FLAGS.out_dir, exist_ok=True)
-    os.makedirs(os.path.join(FLAGS.out_dir, 'val_viz'), exist_ok=True)
-    os.makedirs(os.path.join(FLAGS.out_dir, 'tets'), exist_ok=True)
+    if FLAGS.validate:
+        os.makedirs(os.path.join(FLAGS.out_dir, 'val_viz'), exist_ok=True)
+    if not FLAGS.only_first_phase:
+        os.makedirs(os.path.join(FLAGS.out_dir, 'tets'), exist_ok=True)
     os.makedirs(os.path.join(FLAGS.out_dir, 'tets_pre'), exist_ok=True)
 
 
@@ -663,10 +666,10 @@ if __name__ == "__main__":
 
             global_index = k + FLAGS.index * FLAGS.split_size
 
-            print("file path to save: {:s}".format(os.path.join(FLAGS.out_dir, 'tets/dmt_dict_{:05d}.pt'.format(global_index))))
+            print("file path to save: {:s}".format(os.path.join(FLAGS.out_dir, 'tets_pre/dmt_dict_{:05d}.pt'.format(global_index))))
 
             skip_if_exists = True
-            if skip_if_exists and os.path.exists(os.path.join(FLAGS.out_dir, 'tets/dmt_dict_{:05d}.pt'.format(global_index))):
+            if skip_if_exists and os.path.exists(os.path.join(FLAGS.out_dir, 'tets_pre/dmt_dict_{:05d}.pt'.format(global_index))):
                 continue
 
             try:
@@ -752,44 +755,44 @@ if __name__ == "__main__":
                         base_mesh = xatlas_uvmap_nrm(glctx, geometry, mat, FLAGS)
                     else:
                         base_mesh = xatlas_uvmap(glctx, geometry, mat, FLAGS)
-
-
+                
+                if not FLAGS.only_first_phase:
                 # # ==============================================================================================
                 # #  Pass 2: Finetune deformation with fixed topology
                 # # ==============================================================================================
-                geometry = DMTetGeometryFixedTopo(
-                    geometry, base_mesh, FLAGS.dmtet_grid, FLAGS.mesh_scale, FLAGS, 
-                    deform_scale=FLAGS.second_stage_deform
-                )
-                
-                geometry.sdf_sign.requires_grad = False
-                geometry.sdf_abs.requires_grad = False
-                geometry.deform.requires_grad = True
+                    geometry = DMTetGeometryFixedTopo(
+                        geometry, base_mesh, FLAGS.dmtet_grid, FLAGS.mesh_scale, FLAGS, 
+                        deform_scale=FLAGS.second_stage_deform
+                    )
+                    
+                    geometry.sdf_sign.requires_grad = False
+                    geometry.sdf_abs.requires_grad = False
+                    geometry.deform.requires_grad = True
 
-                geometry.deform.data[:] = geometry.deform * FLAGS.first_stage_deform / FLAGS.second_stage_deform
+                    geometry.deform.data[:] = geometry.deform * FLAGS.first_stage_deform / FLAGS.second_stage_deform
 
-                if FLAGS.use_ema:
-                    geometry.sdf_sign.data[:] = torch.sign(old_geometry.sdf_ema)
-                else:
-                    geometry.sdf_sign.data[:] = torch.sign(old_geometry.sdf)
-                
-                geometry.set_init_v_pos()
+                    if FLAGS.use_ema:
+                        geometry.sdf_sign.data[:] = torch.sign(old_geometry.sdf_ema)
+                    else:
+                        geometry.sdf_sign.data[:] = torch.sign(old_geometry.sdf)
+                    
+                    geometry.set_init_v_pos()
 
 
-                geometry, mat = optimize_mesh(glctx, geometry, mat, lgt, dataset_train, dataset_validate, FLAGS, 
-                            pass_idx=1, pass_name="mesh_pass", warmup_iter=100, optimize_light=FLAGS.learn_light and not FLAGS.lock_light, 
-                            optimize_geometry=not FLAGS.lock_pos)
+                    geometry, mat = optimize_mesh(glctx, geometry, mat, lgt, dataset_train, dataset_validate, FLAGS, 
+                                pass_idx=1, pass_name="mesh_pass", warmup_iter=100, optimize_light=FLAGS.learn_light and not FLAGS.lock_light, 
+                                optimize_geometry=not FLAGS.lock_pos)
 
-                vert_mask = torch.zeros_like(geometry.sdf_sign).long().cuda().view(-1, 1)
-                vert_mask[geometry.getValidVertsIdx()] = 1
+                    vert_mask = torch.zeros_like(geometry.sdf_sign).long().cuda().view(-1, 1)
+                    vert_mask[geometry.getValidVertsIdx()] = 1
 
-                torch.save({
-                        'sdf': geometry.sdf_sign.cpu().detach(),
-                        'deform': (geometry.deform * vert_mask).cpu().detach(),
-                        'deform_unmasked': geometry.deform.cpu().detach(),
-                    }, 
-                    os.path.join(FLAGS.out_dir, 'tets/dmt_dict_{:05d}.pt'.format(global_index))
-                )
+                    torch.save({
+                            'sdf': geometry.sdf_sign.cpu().detach(),
+                            'deform': (geometry.deform * vert_mask).cpu().detach(),
+                            'deform_unmasked': geometry.deform.cpu().detach(),
+                        }, 
+                        os.path.join(FLAGS.out_dir, 'tets/dmt_dict_{:05d}.pt'.format(global_index))
+                    )
 
                 if FLAGS.local_rank == 0 and FLAGS.validate:
                     validate(glctx, geometry, mat, lgt, dataset_validate, os.path.join(FLAGS.out_dir, f"val_viz/dmtet_validate_{FLAGS.index}_{k}_{FLAGS.split_size}"), FLAGS)
@@ -805,7 +808,6 @@ if __name__ == "__main__":
                 print(f"\n\n============ {FLAGS.index}_{k}/{FLAGS.split_size} Failed ============\n\n")
                 print(traceback.format_exc())
                 print("\n\n")
-                continue
             
 
 
