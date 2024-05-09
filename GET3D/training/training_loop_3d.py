@@ -98,8 +98,8 @@ def training_loop(
         D_reg_interval=16,  # How often to perform regularization for D? None = disable lazy regularization.
         total_kimg=25000,  # Total length of the training, measured in thousands of real images.
         kimg_per_tick=4,  # Progress snapshot interval.
-        image_snapshot_ticks=50,  # How often to save image snapshots? None = disable.
-        network_snapshot_ticks=50,  # How often to save network snapshots? None = disable.
+        image_snapshot_ticks=500,  # How often to save image snapshots? None = disable.
+        network_snapshot_ticks=500,  # How often to save network snapshots? None = disable.
         resume_kimg=0,  # First kimg to report when resuming training. ######
         abort_fn=None,
         # Callback function for determining whether to abort training. Must return consistent results across ranks.
