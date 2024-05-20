@@ -10,6 +10,7 @@
 conda install -c pytorch -c nvidia pytorch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 pytorch-cuda=11.8 -y
 pip install ninja xatlas git+https://github.com/NVlabs/nvdiffrast/
 pip install imageio PyOpenGL glfw
+pip install absl-py ml-collections tensorboard
 # imageio_download_bin freeimage
 
 # install pytorch3d, opencv, tinucudann, and kaolin

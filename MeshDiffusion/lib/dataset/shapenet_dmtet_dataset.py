@@ -1,5 +1,6 @@
 import os
 import sys
+import numpy as np
 import torch
 from torch.utils.data import Dataset
 import json
@@ -22,7 +23,7 @@ class ShapeNetDMTetDataset(Dataset):
 
         if filter_meta_path is not None:
             self.filter_ids = json.load(open(filter_meta_path, 'r'))
-            full_id_list = [int(x.rstrip().split('_')[-1][:-len(self.extension)-1]) for i, x in enumerate(self.fpath_list)]
+            full_id_list = [int(x.rstrip().split('_')[-1].split('/')[-1][:-len(self.extension)-1]) for i, x in enumerate(self.fpath_list)]
             fpath_idx_list = [i for i, x in enumerate(full_id_list) if x in self.filter_ids]
             self.fpath_list = [self.fpath_list[i] for i in fpath_idx_list]
     

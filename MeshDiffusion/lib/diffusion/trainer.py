@@ -56,7 +56,7 @@ def train(config):
     logging.info(f"{json_path}, {config.data.filter_meta_path}")
 
     ### mask on tet to ignore regions
-    mask = torch.load(f'./data/grid_mask_{resolution}.pt').view(1, 1, resolution, resolution, resolution).to("cuda")
+    mask = torch.load(f'./data_/grid_mask_{resolution}.pt').view(1, 1, resolution, resolution, resolution).to("cuda")
 
     if hasattr(score_model.module, 'mask'):
         print("----- Assigning mask -----")
@@ -103,7 +103,6 @@ def train(config):
                 # reinitialize data loader 
                 data_iter = iter(train_loader)
                 batch = next(data_iter)
-
             batch = batch.cuda()
 
             # Execute one training step
@@ -112,7 +111,6 @@ def train(config):
             loss_dict = train_step_fn(state, batch, clear_grad=clear_grad_flag, update_param=update_param_flag)
             loss = loss_dict['loss']
             tmp_loss += loss.item()
-
         tmp_loss /= iter_size
         if step % config.training.log_freq == 0:
             logging.info("step: %d, training_loss: %.5e" % (step, tmp_loss))
