@@ -11,7 +11,7 @@ def get_config():
   training.sde = 'vpsde'
   training.continuous = False
   training.reduce_mean = True
-  training.batch_size = 48
+  training.batch_size = 8
   training.lip_scale = None
 
   training.snapshot_freq_for_preemption = 1000

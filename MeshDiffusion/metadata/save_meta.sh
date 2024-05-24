@@ -1,1 +1,1 @@
-python save_meta.py --data_path /root/dev/DMTet_Models/MeshDiffusion/data/res64/chair --json_path /root/dev/DMTet_Models/MeshDiffusion/data/res64/chair_meta.json --extension npy
+python save_meta.py --data_path /root/hdd1/MeshDiffusion/author_dataset/res64/chair --json_path /root/hdd1/MeshDiffusion/author_dataset/res64/chair_meta.json --extension npy
